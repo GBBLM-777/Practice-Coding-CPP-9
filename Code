@@ -1,0 +1,457 @@
+//USERNAME: gbblm
+//PASSWORD: Exer04
+
+#include<iostream> 
+#include<iomanip> 
+#include<cstring> 
+#include<algorithm> 
+#include<cstdlib> 
+using namespace std; 
+#include<conio.h> 
+#include<windows.h>
+
+char menu(); //displays the menu page and allows the user to input the username and password
+void usernameInspect(); //activates the system validation to check if the username is correct before proceeding and allows the user to re-input the username for a limited amount of tries if not.
+void passwordInspect(); //activates the system validation to check if the password is correct before proceeding and allows the user to re-input the password for a limited amount of tries if not.
+string secretPassword(); //makes it so every character inputted by the user for the password is changed into an asterisk (*).
+int productNumValidation(int finalOutput); //activates the system validation to check if the inputted number is within the permitted range of the number of products before proceeding and allows the user to re-input the number of products if not.
+int productNameValidation(int finalOutput); //activates the system validation to check if the inputted number is within the permitted range of the number per product before proceeding and allows the user to re-input the number per product if not.
+double priceAudit(double finalOutput); //activates the system validation to check if the inputted price is within the permitted range of cost per product and correct format before proceeding and allows the user to re-input the price per product if not.
+int stockExaminer(int finalOutput); //activates the system validation to check if the number of inputted stores per product is within the permitted range of the amount of stock before proceeding and allows the user to re-input the stock available per product if not.
+int soldReviewer(int finalOutput); //activates the system validation to check if the inputted number is within the permitted range of the number of products sold before proceeding and allows the user to re-input the number of sold products if not.
+
+
+/////////////////////////////////// PROGRAM ///////////////////////////////////////////
+int main()
+{
+	/////////////////////////////////// DECLARATION ///////////////////////////////////////////
+	int productNumVal, productNameVal;
+	int xproductNumVal, xproductNameVal; 
+
+	int indexx, indexy, indexz=0; 
+	int indexa, indexb, indexc=0; 
+	
+	string productNameArr[10], labelNameArr[10]; 
+
+	double costArr[10];  
+	double xcostArr[10]; 
+
+	int availArr[10], salesArr[10]; 
+	int xavailArr[10], xsalesArr[10]; 
+
+	int ctrArr[10]; 
+	char choice;
+	
+
+	/////////////////////////////////// PROCESS ///////////////////////////////////////////	
+	choice=menu();
+	
+	system("cls"); 
+
+	cout << setw(50) << "***** INVENTORY SYSTEM C++.2 *****" << endl;
+	cout << endl;
+	cout << "ENTER NUMBER OF PRODUCTS FOR INVENTORY: ";
+	xproductNumVal = productNumValidation(productNumVal); 
+	cout << endl;
+	cout << "ENTER " << xproductNumVal << " PRODUCTS" << endl;
+	
+	for(indexx=0; indexx<xproductNumVal; indexx++) 
+	{
+		cout << "Product " << (indexx)+1 << ": "; 
+		cin >> productNameArr[indexx]; 
+		cout << endl;
+				
+			cout << "How many " << productNameArr[indexx] << "? ";
+			xproductNameVal = productNameValidation(productNameVal); 
+			ctrArr[indexx] = xproductNameVal;
+			
+				for(indexy=0; indexy<xproductNameVal; indexy++) 
+				{
+					cout << productNameArr[indexx] << "[" << (indexy)+1 << "]: ";
+					cin >> labelNameArr[indexz]; 
+					cout << endl;
+
+					cout << "Price: Php";
+						xcostArr[indexz] = priceAudit(costArr[indexz]); 
+					
+					cout << "Stock: ";
+						xavailArr[indexz] = stockExaminer(availArr[indexz]); 
+					
+					cout << "Sold: ";
+						xsalesArr[indexz] = soldReviewer(salesArr[indexz]); 
+					
+					indexz++;
+					
+					cout << endl;
+				}//end-for
+	}//end-for
+
+
+	/////////////////////////////////// TABULAR OUTPUT ///////////////////////////////////////////	
+	system("cls");
+
+	cout << setw(50) << "***** INVENTORY SYSTEM C++.2 *****" << endl;
+	cout << endl;
+	cout << "PROD. NO" << setw(10) << "PRODUCT" << setw(10) << "NAME" << setw(15) << "PRICE" << setw(10) << "STOCK" << setw(10) << "SOLD" << setw(10) << "LEFT" << endl;
+	
+	for (indexb=0; indexb<xproductNumVal; indexb++)
+	{	
+		indexa = ctrArr[indexb];	
+		indexa = indexa+indexc;
+		
+		for (indexc; indexc<indexa; indexc++)	
+		{
+			cout << setw(3) << "["<<indexb+1<<"]" << setw(13); 
+			cout << productNameArr[indexb] << setw(13);
+			cout << labelNameArr[indexc] << setw(11); 
+			cout << setprecision(4) << xcostArr[indexc] << setw(10); 
+			cout << xavailArr[indexc] << setw(10);
+			cout << xsalesArr[indexc] << setw(10); 
+			cout << (xavailArr[indexc])-(xsalesArr[indexc]) << endl; 
+		}//end-for
+		
+		cout << endl;
+	}//end-for
+
+	system("pause");
+
+}//end-int-main
+
+
+/////////////////////////////////// FUNCTIONS ///////////////////////////////////////////
+/////////////////////////////////// CHAR-MENU ///////////////////////////////////////////
+char menu()
+{	
+	string password;
+
+	cout << "________________________________________ " << endl;
+	cout << "|   PRODUCT INVENTORY SYSTEM CSS122L   |" << endl;
+	cout << "|                                      |" << endl;
+	cout << "|   USERNAME: ";
+
+	usernameInspect(); 
+
+	system("cls");
+
+	cout << "________________________________________ " << endl;
+	cout << "|   PRODUCT INVENTORY SYSTEM CSS122L   |" << endl;
+	cout << "|                                      |" << endl;
+	cout << "|   PASSWORD: ";
+
+	passwordInspect(); 
+}//end-char-menu
+
+/////////////////////////////////// VOID-USERNAME-INSPECT ///////////////////////////////////////////
+void usernameInspect()
+{
+	bool validation=true;
+	string userName="gbblm", usernameInput; 
+	int tries=0;		
+	
+	while(validation) 
+	{
+		cin >> usernameInput; 
+		try
+		{
+			if(usernameInput!=userName) 
+			{
+				throw usernameInput; 
+			}//end-if
+		}//end-try
+		
+		catch(string usernameInput) 
+		{	
+			tries++;
+			if(tries==3) 
+			{	
+				cout << "Unfortunately all the number of tries has been used... Reload the page for more" << endl;
+				exit(1); 
+			}//end-if
+
+			system("cls"); 
+
+			cout << "Sorry, you have logged in the incorrect username... Please Try Again!" << endl;			
+			cout << "________________________________________ " << endl;
+			cout << "|   PRODUCT INVENTORY SYSTEM CSS122L   |" << endl;
+			cout << "|                                      |" << endl;
+			cout << "|   USERNAME: ";		
+			
+			continue;
+		}//end-catch
+
+		validation=false;
+
+	}//end-while
+}//end-void-usernameInspect
+
+/////////////////////////////////// VOID-PASSWORD-INSPECT ///////////////////////////////////////////
+void passwordInspect()
+{
+	bool validation=true;
+	char call;
+	string passWord="Exer04", passwordInput; 
+	int tries=0;		
+	
+	while(validation) 
+	{
+		passwordInput = secretPassword(); 
+		try
+		{
+			if(passwordInput!=passWord) 
+			{
+				throw passwordInput; 
+			}//end-for
+		}//end-try
+		
+		catch(string passwordInput)
+		{	
+			tries++;
+			if(tries==3) 
+			{
+				cout << "Unfortunately all the number of tries has been used... Reload the page for more" << endl;
+				exit(1); 
+			}//end-if
+			
+			system("cls"); 
+
+			cout << "Sorry, you have logged in the incorrect password... Please Try Again!"  << endl;			
+			cout << "________________________________________ " << endl;
+			cout << "|   PRODUCT INVENTORY SYSTEM CSS122L   |" << endl;
+			cout << "|                                      |" << endl;
+			cout << "|   PASSWORD: ";		
+
+			continue;
+		}//end-catch
+
+		validation=false;
+
+	}//end-while
+}//end-void-passowrdInspect
+
+/////////////////////////////////// STRING-SECRET-PASSWORD ///////////////////////////////////////////
+string secretPassword() 
+{
+    char password[32];
+
+    int i = 0;
+    char prime;
+    
+    for(i=0;;)
+	{
+        prime=getch();
+        if((prime>='a' && prime<='z')||(prime>='A' && prime<='Z')||(prime>='0' && prime<='9'))
+		{
+            password[i]=prime;
+            ++i;
+            cout << "*";
+        }//end-if
+
+        if(prime=='\b' && i>=1)
+		{
+            cout << "\b \b";
+            --i;
+        }//end-if
+
+        if(prime=='\r')
+		{
+            password[i]='\0';
+            break;
+        }//end-if
+    }//end-for
+
+    return password;
+
+}//end-string-secretPassword
+
+/////////////////////////////////// INT-PRODUCT-NUM-VALIDATION ///////////////////////////////////////////
+int productNumValidation(int finalOutput)
+{
+	bool validation=true;
+
+	while(validation)
+	{
+		cin >> finalOutput; 
+		try
+		{
+			if(finalOutput>100) 
+			{
+				throw finalOutput; 
+			}//end-if
+		}//end-try
+		
+		catch(int finalOutput)
+		{	
+			cout << "The range allowed to be inputted is 0-100 products only!" << endl;
+			cout << endl;
+			cout << "RE-ENTER NUMBER OF PRODUCTS FOR INVENTORY: ";
+			
+			continue;			
+		}//end-catch
+		
+		try
+		{
+			if(finalOutput<0) 
+			{
+				throw finalOutput;
+			}//end-if
+		}//end-try
+		
+		catch(int finalOutput)
+		{	
+			cout << "The inputted number is negative and invalid!" << endl;
+			cout << endl;
+			cout << "RE-ENTER NUMBER OF PRODUCTS FOR INVENTORY: "; 
+			
+			continue;			
+		}//end-catch
+
+		validation=false;
+	}//end-while
+	
+	return finalOutput;
+
+}//end-int-productNumValidation
+
+/////////////////////////////////// INT-PRODUCT-NAME-VALIDATION ///////////////////////////////////////////
+int productNameValidation(int finalOutput)
+{
+	bool validation=true;
+	
+	while(validation)
+	{
+		cin >> finalOutput; 
+		try
+		{
+			if(finalOutput>100) 
+			{
+				throw finalOutput; 
+			}//end-if
+		}//end-try
+		
+		catch(int finalOutput)
+		{	
+			cout << "The range allowed to be inputted is 0-100 products only!" << endl;
+			cout << endl;
+			cout << "RE-ENTER AMOUNT: ";
+			
+			continue;			
+		}//end-catch
+		
+		try
+		{
+			if(finalOutput<0) 
+			{
+				throw finalOutput;
+			}//end-if
+		}//end-try
+		
+		catch(int finalOutput)
+		{	
+			cout << "The inputted number is negative and invalid!" << endl;
+			cout << endl;
+			cout << "RE-ENTER AMOUNT: "; 
+			
+			continue;			
+		}//end-catch
+
+		validation=false;
+	}//end-while
+	
+	return finalOutput;
+
+}//end-int-productNameValidation
+
+/////////////////////////////////// DOUBLE-PRICE-AUDIT ///////////////////////////////////////////
+double priceAudit(double finalOutput)
+{
+	bool validation=true;
+	
+	while(validation)
+	{
+		cin >> finalOutput;
+		try
+		{
+			if(finalOutput<0)
+			{
+				throw finalOutput;
+			}//end-if
+		}//end-try
+		
+		catch(double finalOutput)
+		{	
+			cout << "The inputted number is negative and invalid!" << endl;
+			cout << endl;
+			cout << "RE-ENTER PRICE: "; 
+			continue;			
+		}//end-catch
+
+		validation=false;
+	}//end-while
+	
+	return finalOutput;
+
+}//end-double-priceAudit
+
+/////////////////////////////////// INT-STOCK-EXAMINER ///////////////////////////////////////////
+int stockExaminer(int finalOutput)
+{
+	bool validation=true;
+
+	while(validation)
+	{
+		cin >> finalOutput;
+		try
+		{
+			if(finalOutput<0)
+			{
+				throw finalOutput;
+			}//end-if
+		}//end-try
+		
+		catch(int finalOutput)
+		{	
+			cout << "The inputted number is negative and invalid!" << endl;
+			cout << endl;
+			cout << "RE-ENTER STOCK: ";  
+
+			continue;			
+		}//end-catch
+
+		validation=false;
+	}//end-while
+	
+	return finalOutput;
+
+}//end-int-stock-Examiner
+
+/////////////////////////////////// INT-SOLD-REVIEWER ///////////////////////////////////////////
+int soldReviewer(int finalOutput)
+{
+	bool validation=true;
+	
+	while(validation)
+	{
+		cin >> finalOutput;
+		try
+		{
+			if(finalOutput<0)
+			{
+				throw finalOutput;
+			}//end-if
+		}//end-try
+		
+		catch(int finalOutput)
+		{	
+			cout << "The inputted number is negative and invalid!" << endl;
+			cout << endl;
+			cout << "RE-ENTER SOLD: ";  
+
+			continue;			
+		}//end-catch
+
+		validation=false;
+	}//end-while
+	
+	return finalOutput;
+
+}//end-int-soldReviewer
